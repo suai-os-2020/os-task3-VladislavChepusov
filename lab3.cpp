@@ -2,10 +2,6 @@
 #include <windows.h>
 #include <stdio.h>
 
-//
-// lab3 code should be located here!
-//
-
 
 #define THREADCOUNT 12
 HANDLE Threads[THREADCOUNT];
@@ -44,7 +40,7 @@ DWORD WINAPI ThreadA(LPVOID name)
     }
 
     if (!ReleaseSemaphore(semB, 1, NULL))
-        printf("ReleaseSemaphore error: %d\n", GetLastError());
+        printf("Release Semaphore B error: %d\n", GetLastError());
 
     return TRUE;
 }
@@ -60,7 +56,7 @@ DWORD WINAPI ThreadB(LPVOID name)
         computation();
 
         if (!ReleaseSemaphore(semC, 1, NULL))
-            printf("ReleaseSemaphore error: %d\n", GetLastError());
+            printf("Release Semaphore error: %d\n", GetLastError());
     }
 
     for (size_t i = 0; i < 3; ++i)
@@ -72,7 +68,7 @@ DWORD WINAPI ThreadB(LPVOID name)
         computation();
 
         if (!ReleaseSemaphore(semD, 1, NULL))
-            printf("ReleaseSemaphore error: %d\n", GetLastError());
+            printf("Release Semaphore error: %d\n", GetLastError());
     }
 
     for (size_t i = 0; i < 3; ++i)
@@ -84,7 +80,7 @@ DWORD WINAPI ThreadB(LPVOID name)
         computation();
 
         if (!ReleaseSemaphore(semM, 1, NULL))
-            printf("ReleaseSemaphore error: %d\n", GetLastError());
+            printf("Release Semaphore error: %d\n", GetLastError());
     }
 
     WaitForSingleObject(semB, INFINITE);
@@ -97,6 +93,14 @@ DWORD WINAPI ThreadB(LPVOID name)
         computation();
     }
 
+    WaitForSingleObject(Threads[7], INFINITE);
+    WaitForSingleObject(Threads[8], INFINITE);
+    WaitForSingleObject(Threads[9], INFINITE);
+
+    if (!ReleaseSemaphore(semN, 1, NULL)) {
+        printf("Release Semaphore N error: %d\n", GetLastError());
+    }
+
     for (size_t i = 0; i < 3; ++i)
     {
         WaitForSingleObject(semB, INFINITE);
@@ -106,7 +110,7 @@ DWORD WINAPI ThreadB(LPVOID name)
         computation();
 
         if (!ReleaseSemaphore(semN, 1, NULL))
-            printf("ReleaseSemaphore error: %d\n", GetLastError());
+            printf("Release Semaphore error: %d\n", GetLastError());
     }
 
     return TRUE;
@@ -124,7 +128,7 @@ DWORD WINAPI ThreadC(LPVOID name)
         computation();
 
         if (!ReleaseSemaphore(semD, 1, NULL))
-            printf("ReleaseSemaphore error: %d\n", GetLastError());
+            printf("Release Semaphore error: %d\n", GetLastError());
     }
 
     return TRUE;
@@ -140,8 +144,9 @@ DWORD WINAPI ThreadD(LPVOID name)
         std::cout << 'd' << std::flush;
         ReleaseMutex(mutex);
         computation();
+
         if (!ReleaseSemaphore(semF, 1, NULL))
-            printf("ReleaseSemaphore error: %d\n", GetLastError());
+            printf("Release Semaphore error: %d\n", GetLastError());
     }
 
     for (size_t i = 0; i < 3; ++i)
@@ -151,8 +156,9 @@ DWORD WINAPI ThreadD(LPVOID name)
         std::cout << 'd' << std::flush;
         ReleaseMutex(mutex);
         computation();
+
         if (!ReleaseSemaphore(semE, 1, NULL))
-            printf("ReleaseSemaphore error: %d\n", GetLastError());
+            printf("Release Semaphore error: %d\n", GetLastError());
     }
 
     return TRUE;
@@ -171,11 +177,9 @@ DWORD WINAPI ThreadF(LPVOID name)
         computation();
 
         if (!ReleaseSemaphore(semB, 1, NULL))
-            printf("ReleaseSemaphore error: %d\n", GetLastError());
+            printf("Release Semaphore error: %d\n", GetLastError());
     }
-   // if (!ReleaseSemaphore(semF, 1, NULL))
-     //   printf("ReleaseSemaphore error: %d\n", GetLastError());
-   
+
     for (size_t i = 0; i < 3; ++i)
     {
         WaitForSingleObject(semF, INFINITE);
@@ -185,7 +189,7 @@ DWORD WINAPI ThreadF(LPVOID name)
         computation();
 
         if (!ReleaseSemaphore(semB, 1, NULL))
-            printf("ReleaseSemaphore error: %d\n", GetLastError());
+            printf("Release Semaphore error: %d\n", GetLastError());
     }
 
     return TRUE;
@@ -203,14 +207,12 @@ DWORD WINAPI ThreadE(LPVOID name)
         computation();
 
         if (!ReleaseSemaphore(semF, 1, NULL))
-            printf("ReleaseSemaphore error: %d\n", GetLastError());
+            printf("Release Semaphore error: %d\n", GetLastError());
     }
- 
+
 
     return TRUE;
 }
-
-
 
 /////////////////////////////////G
 DWORD WINAPI ThreadG(LPVOID name)
@@ -222,21 +224,10 @@ DWORD WINAPI ThreadG(LPVOID name)
         std::cout << 'g' << std::flush;
         ReleaseMutex(mutex);
         computation();
+
         if (!ReleaseSemaphore(semB, 1, NULL))
-            printf("ReleaseSemaphore error: %d\n", GetLastError());
+            printf("Release Semaphore error: %d\n", GetLastError());
     }
-
-    
-    /*
-  if (!ReleaseSemaphore(semM, 1, NULL))
-      printf("ReleaseSemaphore error: %d\n", GetLastError());
-
-  if (!ReleaseSemaphore(semK, 1, NULL))
-      printf("ReleaseSemaphore error: %d\n", GetLastError());
-
-  if (!ReleaseSemaphore(semH, 1, NULL))
-      printf("ReleaseSemaphore error: %d\n", GetLastError());
-      */
 
     return TRUE;
 }
@@ -250,7 +241,7 @@ DWORD WINAPI ThreadH(LPVOID name)
         WaitForSingleObject(mutex, INFINITE);
         std::cout << 'h' << std::flush;
         ReleaseMutex(mutex);
-        computation(); 
+        computation();
     }
 
     return TRUE;
@@ -267,8 +258,9 @@ DWORD WINAPI ThreadK(LPVOID name)
         std::cout << 'k' << std::flush;
         ReleaseMutex(mutex);
         computation();
+
         if (!ReleaseSemaphore(semG, 1, NULL))
-            printf("ReleaseSemaphore error: %d\n", GetLastError());
+            printf("Release Semaphore error: %d\n", GetLastError());
     }
 
     WaitForSingleObject(semK, INFINITE);
@@ -316,7 +308,7 @@ DWORD WINAPI ThreadM(LPVOID name)
 /////////////////////////////////N
 DWORD WINAPI ThreadN(LPVOID name)
 {
-   
+
     for (size_t i = 0; i < 3; ++i)
     {
         WaitForSingleObject(semN, INFINITE);
@@ -324,13 +316,10 @@ DWORD WINAPI ThreadN(LPVOID name)
         std::cout << 'n' << std::flush;
         ReleaseMutex(mutex);
         computation();
+
         if (!ReleaseSemaphore(semB, 1, NULL))
-            printf("ReleaseSemaphore error: %d\n", GetLastError());
+            printf("Release Semaphore error: %d\n", GetLastError());
     }
-
-    if (!ReleaseSemaphore(semP, 1, NULL))
-        printf("ReleaseSemaphore error: %d\n", GetLastError());
-
     return TRUE;
 }
 
@@ -349,9 +338,6 @@ DWORD WINAPI ThreadP(LPVOID name)
     return TRUE;
 }
 
-
-
- 
 
 int lab3_init()
 {
@@ -456,40 +442,35 @@ int lab3_init()
     Threads[9] = CreateThread(NULL, 0, ThreadM, NULL, 0, &ThreadID);
     Threads[10] = CreateThread(NULL, 0, ThreadN, NULL, 0, &ThreadID);
     Threads[11] = CreateThread(NULL, 0, ThreadP, NULL, 0, &ThreadID);
-   
+
 
     WaitForSingleObject(Threads[6], INFINITE);
-   if (!ReleaseSemaphore(semM, 1, NULL) ){
-       printf("ReleaseSemaphore M error: %d\n", GetLastError());
-   }
 
-   if (!ReleaseSemaphore(semK, 1, NULL)){
-       printf("ReleaseSemaphore K error: %d\n", GetLastError());
-   }
-   if (!ReleaseSemaphore(semH, 1, NULL)) {
-       printf("ReleaseSemaphore H error: %d\n", GetLastError());
-   }
- 
-   WaitForSingleObject(Threads[7], INFINITE);
-   WaitForSingleObject(Threads[8], INFINITE);
-   WaitForSingleObject(Threads[9], INFINITE);
-
-   if (!ReleaseSemaphore(semN, 1, NULL)) {
-       printf("ReleaseSemaphore N error: %d\n", GetLastError());
-   }
-
-
-    for (int i = 0; i < THREADCOUNT; i++){
-        WaitForSingleObject(Threads[i], INFINITE);
-       CloseHandle(Threads[i]);
-
+    if (!ReleaseSemaphore(semM, 1, NULL)) {
+        printf("ReleaseSemaphore M error: %d\n", GetLastError());
     }
-    /*
+
+    if (!ReleaseSemaphore(semK, 1, NULL)) {
+        printf("ReleaseSemaphore K error: %d\n", GetLastError());
+    }
+    if (!ReleaseSemaphore(semH, 1, NULL)) {
+        printf("ReleaseSemaphore H error: %d\n", GetLastError());
+    }
+
+    WaitForSingleObject(Threads[10], INFINITE);
+    WaitForSingleObject(Threads[1], INFINITE);
+
+    if (!ReleaseSemaphore(semP, 1, NULL))
+        printf("ReleaseSemaphore error: %d\n", GetLastError());
+
+
     for (int i = 0; i < THREADCOUNT; i++) {
+        WaitForSingleObject(Threads[i], INFINITE);
         CloseHandle(Threads[i]);
+
     }
- */
-        //для все семафоров
+   
+ //для  семафоров
     CloseHandle(semA);
     CloseHandle(semB);
     CloseHandle(semC);
